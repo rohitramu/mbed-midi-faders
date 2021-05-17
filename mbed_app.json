@@ -1,0 +1,16 @@
+{
+    "requires": [
+        "bare-metal",
+        "drivers-usb",
+        "events",
+        "serial"
+    ],
+    "target_overrides": {
+        "*": {
+            "target.default-adc-vref": "3.3",
+            "target.device_has_add": [
+                "USBDEVICE"
+            ]
+        }
+    }
+}

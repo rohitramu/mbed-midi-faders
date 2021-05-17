@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "*.tpl": "helm",
+        "*.yaml": "helm",
+        "*.overlay": "dts",
+        ".config": "properties",
+        "thread": "cpp",
+        "*.tcc": "cpp",
+        "algorithm": "cpp",
+        "functional": "cpp",
+        "array": "cpp",
+        "cmath": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "Enabled"
+}

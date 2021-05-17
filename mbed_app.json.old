@@ -1,0 +1,23 @@
+{
+    "requires": [
+        "bare-metal",
+        "drivers-usb",
+        "events"
+    ],
+    "config": {
+        "usb_speed": {
+            "help": "USE_USB_FS",
+            "value": "USE_USB_FS"
+        }
+    },
+    "target_overrides": {
+        "*": {
+            "target.clock_source": "USE_PLL_HSE_XTAL",
+            "target.clock_source_usb": "1",
+            "target.device_has_add": [
+                "USBDEVICE"
+            ],
+            "target.default_lib": "small"
+        }
+    }
+}
