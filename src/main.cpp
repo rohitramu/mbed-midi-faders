@@ -39,13 +39,12 @@ int main()
     printf("Initialized USBMIDI\n");
 
     vector<AnalogMIDIControl> midi_controls = {
-        {"Modulation", PA_0, &midi, 1},
-        {"Expression", PA_1, &midi, 11},
+        {"Modulation", AnalogControl{PA_0}, midi, 1},
+        {"Expression", AnalogControl{PA_1}, midi, 11},
     };
 
     printf("Starting loop...\n");
 
-    // AnalogControl test{PA_0};
     while (true)
     {
         bool update = false;
@@ -55,5 +54,7 @@ int main()
         }
 
         pin_led = update;
+
+        // wait_us(1'000);
     }
 }

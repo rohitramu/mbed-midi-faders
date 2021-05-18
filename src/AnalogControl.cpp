@@ -1,53 +1,54 @@
 #include "mbed.h"
 #include "AnalogControl.h"
+#include "math.h"
 
-AnalogControl::AnalogControl(PinName pin, uint16_t sensitivity_damper)
-    : _pin_name(pin), _pin(pin), _sensitivity_damper(sensitivity_damper)
+AnalogControl::AnalogControl(
+    PinName pin,
+    float sensitivity,
+    size_t moving_average_samples) :
+        _pin_name(pin),
+        _pin(pin),
+        _sensitivity(sensitivity),
+        _moving_average_samples(moving_average_samples)
 {
+    assert(sensitivity >= 0 && sensitivity <= 1);
 }
 
-uint16_t take_readings(AnalogIn &pin, const size_t num_readings, const uint16_t delay_between_readings_us)
+uint16_t sample_num = 0;
+uint16_t AnalogControl::read()
 {
-    uint16_t *readings = new uint16_t[num_readings];
+    // Get the new value
+    uint16_t new_value = _pin.read_u16();
 
-    // Take the readings
-    for (size_t i = 0; i < num_readings; i++)
+    // Remove the oldest value from the moving window
+    if (_values.size() >= _moving_average_samples)
     {
-        if (i > 0)
-        {
-            wait_us(delay_between_readings_us);
-        }
-
-        uint16_t val = pin.read_u16();
-        readings[i] = val;
+        _values.pop_front();
     }
 
-    // Compute the average
-    uint32_t sum = 0;
-    for (size_t i = 0; i < num_readings; i++)
+    // Add the new value to the moving window
+    _values.push_back(new_value);
+
+    // Calculate the average value in our moving window
+    long double running_total = 0;
+    for (auto &val : _values)
     {
-        sum += readings[i];
+        running_total += val;
     }
-    uint16_t result = 1.0 * sum / num_readings;
+    long double moving_window_average = running_total / _values.size();
 
-    delete readings;
+    // Calculate the new running total based on the sensitivity
+    long double exp_filter_value =
+        (_values_average * (1 - _sensitivity)) + (new_value * _sensitivity);
 
-    return result;
-}
+    uint16_t result = (exp_filter_value + moving_window_average) / 2;
 
-bool AnalogControl::try_get_new_value(
-    uint16_t &new_value,
-    const uint16_t num_readings,
-    const uint16_t delay_between_readings_us)
-{
-    new_value = take_readings(_pin, num_readings, delay_between_readings_us);
-
-    if (abs(new_value - _value) > _sensitivity_damper)
+    if (abs(result - _values_average) > VALUE_UPDATE_THRESHOLD)
     {
-        // printf("Update %u: \t%u -> %u\n", _pin_name, _value, new_value);
-        _value = new_value;
-        return true;
+        _values_average = result;
     }
 
-    return false;
+    // printf("%u,%u,%u _", ++sample_num, new_value, (uint16_t)_values_average);
+
+    return _values_average;
 }

@@ -5,7 +5,7 @@ Standard: Cpp11
 UseTab: Never
 IndentWidth: 4
 TabWidth: 4
-ColumnLimit: 120
+ColumnLimit: 80
 
 # AllowAllParametersOfDeclarationOnNextLine: true
 AlignAfterOpenBracket: AlwaysBreak
@@ -22,9 +22,17 @@ BinPackArguments: false
 BinPackParameters: false
 BreakBeforeBinaryOperators: false
 BreakBeforeBraces: Allman
+BreakBeforeInheritanceComma: false
 BreakBeforeTernaryOperators: true
+BreakConstructorInitializers: AfterColon
+BreakConstructorInitializersBeforeComma: false
+BreakInheritanceList: AfterColon
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+ConstructorInitializerIndentWidth: 8
 ContinuationIndentWidth: 4
 IndentCaseLabels: true
 KeepEmptyLinesAtTheStartOfBlocks: false
 MaxEmptyLinesToKeep: 1
 NamespaceIndentation: All
+PointerAlignment: Right
+SpaceBeforeCtorInitializerColon: true

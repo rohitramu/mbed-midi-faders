@@ -9,7 +9,8 @@
         "algorithm": "cpp",
         "functional": "cpp",
         "array": "cpp",
-        "cmath": "cpp"
+        "cmath": "cpp",
+        "new": "cpp"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }
